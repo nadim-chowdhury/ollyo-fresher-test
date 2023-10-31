@@ -7,15 +7,9 @@ import Link from "next/link";
 import { BsFillCheckSquareFill, BsGithub, BsLinkedin } from "react-icons/bs";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-interface ImageData {
-  id: number;
-  title: string;
-  src: string;
-}
-
 export default function Home() {
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
-  const [updatedImages, setupdatedImages] = useState<any>([]);
+  const [updatedImages, setupdatedImages] = useState<any>(images);
 
   const handleImageClick = (imgId: number) => {
     if (selectedImages.includes(imgId)) {
@@ -27,7 +21,7 @@ export default function Home() {
 
   const handleDeleteSelected = () => {
     const updatedImages = images.filter(
-      (img) => !selectedImages.includes(img.id)
+      (img: any) => !selectedImages.includes(img.id)
     );
 
     setupdatedImages(updatedImages);
@@ -41,49 +35,47 @@ export default function Home() {
     const reorderedImages = Array.from(updatedImages);
     const [movedImage] = reorderedImages.splice(result.source.index, 1);
     reorderedImages.splice(result.destination.index, 0, movedImage);
-
     setupdatedImages(reorderedImages);
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <main className="max-w-5xl mx-auto mt-20 bg-white p-4 border rounded-md">
-        <div className="border-b pb-2 mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">
-            {selectedImages.length > 0
-              ? `${selectedImages.length} File Selected`
-              : "Gallery"}
-          </h1>
+    <main className="max-w-5xl mx-auto my-20 bg-white p-4 border rounded-md">
+      <div className="border-b pb-2 mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">
+          {selectedImages.length > 0
+            ? `${selectedImages.length} File Selected`
+            : "Gallery"}
+        </h1>
 
-          {selectedImages.length > 0 && (
-            <button
-              className="bg-red-500 text-white py-1 px-3 rounded-md"
-              onClick={handleDeleteSelected}
-            >
-              Delete Selected
-            </button>
-          )}
-        </div>
+        {selectedImages.length > 0 && (
+          <button
+            className="bg-red-500 text-white py-1 px-3 rounded-md"
+            onClick={handleDeleteSelected}
+          >
+            Delete Selected
+          </button>
+        )}
+      </div>
 
-        <Droppable droppableId="image-gallery">
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="image-gallery" type="DEFAULT">
           {(provided: any) => (
             <div
-              {...provided.droppableProps}
               ref={provided.innerRef}
+              {...provided.droppableProps}
               className="my__gallery grid grid-cols-5 gap-4"
             >
-              {updatedImages.map((img: ImageData, index: number) => (
+              {updatedImages.map((img: any, index: number) => (
                 <Draggable
                   key={img.id}
                   draggableId={img.id.toString()}
                   index={index}
                 >
-                  {(provided: any, snapshot: any) => (
+                  {(provided: any) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      key={img.id}
                       className={`relative overflow-hidden border rounded-lg cursor-pointer transition-all duration-300 hover:opacity-40 ${
                         index === 0 ? "col-span-2 row-span-2" : ""
                       } `}
@@ -105,19 +97,21 @@ export default function Home() {
                   )}
                 </Draggable>
               ))}
+
+              {provided.placeholder}
             </div>
           )}
         </Droppable>
+      </DragDropContext>
 
-        <div className="flex items-center justify-end mt-6 gap-4">
-          <Link href="https://github.com/nadim-chowdhury">
-            <BsGithub />
-          </Link>
-          <Link href="https://www.linkedin.com/in/nadim-chowdhury/">
-            <BsLinkedin />
-          </Link>
-        </div>
-      </main>
-    </DragDropContext>
+      <div className="flex items-center justify-end mt-6 gap-4">
+        <Link href="https://github.com/nadim-chowdhury">
+          <BsGithub />
+        </Link>
+        <Link href="https://www.linkedin.com/in/nadim-chowdhury/">
+          <BsLinkedin />
+        </Link>
+      </div>
+    </main>
   );
 }
