@@ -79,7 +79,7 @@ export default function Home() {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       className={`relative overflow-hidden border rounded-lg cursor-pointer transition-all duration-300 hover:opacity-40 ${
-                        selectedImages.includes(img.id) ? "border-red-500" : ""
+                        index === 0 ? "col-span-2 row-span-2" : ""
                       } `}
                       onClick={() => handleImageClick(img.id)}
                     >
