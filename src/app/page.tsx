@@ -24,6 +24,7 @@ export default function Home() {
       (img: any) => !selectedImages.includes(img.id)
     );
 
+    setSelectedImages([]);
     setupdatedImages(updatedImages);
   };
 
@@ -35,6 +36,7 @@ export default function Home() {
     const reorderedImages = Array.from(updatedImages);
     const [movedImage] = reorderedImages.splice(result.source.index, 1);
     reorderedImages.splice(result.destination.index, 0, movedImage);
+
     setupdatedImages(reorderedImages);
   };
 
