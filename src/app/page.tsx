@@ -65,7 +65,7 @@ export default function Home() {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="my__gallery grid grid-cols-5 gap-4"
+              className="my__gallery grid grid-cols-5 grid-rows-3 gap-4"
             >
               {updatedImages.map((img: any, index: number) => (
                 <Draggable
